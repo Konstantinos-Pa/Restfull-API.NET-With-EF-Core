@@ -6,15 +6,16 @@ namespace Assignment.Models
     {
         public int Id { get; set; }
 
-        public string TopicDescription { get; set; }
+        public string? TopicDescription { get; set; }
 
         public int AwardedMarks { get; set; }
 
-        public int possibleMarks { get; set; }
+        public int PossibleMarks { get; set; }
 
         // Foreign Key for Certificate
+
         public int CertificateId { get; set; }  
-        public Certificate Certificate { get; set; }
+        public Certificate? Certificate { get; set; }
 
     }
 }

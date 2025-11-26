@@ -11,11 +11,12 @@ namespace Assignment.Models
         [MaxLength(10)]
         public int MobileNumber { get; set; }
 
-        public string MobileType { get; set; }
+        public string? MobileType { get; set; }
 
         // Foreign key to Candidate
-        [Required]
+
+        [ForeignKey(nameof(CandidateNumber))]
         public int CandidateNumber { get; set; }
-        public Candidate Candidate { get; set; }    
+        public Candidate? Candidate { get; set; }    
     }
 }

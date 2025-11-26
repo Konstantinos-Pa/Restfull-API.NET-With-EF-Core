@@ -12,13 +12,12 @@ namespace Assignment.Models
     public class Candidate
     {
         [Key]
-        [Column("Id")]
         public int CandidateNumber { get; set; }
 
         [Required]
         [MinLength(5)]
         [MaxLength(20)]
-        public string FirstName { get; set; }
+        public string? FirstName { get; set; }
 
         [MinLength(5)]
         [MaxLength(20)]
@@ -27,7 +26,7 @@ namespace Assignment.Models
         [Required]
         [MinLength(5)]
         [MaxLength(20)]
-        public string LastName { get; set; }
+        public string? LastName { get; set; }
 
         [Required]
         public Gender Gender { get; set; }
@@ -37,20 +36,20 @@ namespace Assignment.Models
         public DateOnly DateOfBirth { get; set; }
 
         [Required]
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         [Required]
-        public string NativeLanguage { get; set; }
+        public string? NativeLanguage { get; set; }
 
 
 
-        public ICollection<Address> Addresses { get; set; }
+        public ICollection<Address>? Addresses { get; set; }
 
-        public ICollection<Mobile> Mobiles { get; set; }
+        public ICollection<Mobile>? Mobiles { get; set; }
 
-        public ICollection<Photo_Id> Photo_Id { get; set; }
+        public PhotoId? PhotoId { get; set; }
 
-        public ICollection<Certificate> Certificates { get; set; }
+        public ICollection<Certificate>? Certificates { get; set; }
 
     }
 }

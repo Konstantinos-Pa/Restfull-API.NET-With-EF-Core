@@ -9,10 +9,10 @@ namespace Assignment.Models
 
         [Required]
         [MaxLength(50)]
-        public string Title { get; set; }
+        public string? Title { get; set; }
 
         [Required]
-        public string AssessmentTestCode { get; set; }
+        public string? AssessmentTestCode { get; set; }
 
 
         [Required]
@@ -30,12 +30,12 @@ namespace Assignment.Models
 
         public int PercentageScore { get; set; }
 
-        public string AssessmentResultLabel { get; set; }
+        public string? AssessmentResultLabel { get; set; }
 
         // Foreign Key for Candidate M-M
-        public ICollection<Candidate> Candidates { get; set; }
+        public ICollection<Candidate>? Candidates { get; set; }
 
-        public ICollection<CandidatesAnalytics> CandidatesAnalytics { get; set; }
+        public ICollection<CandidatesAnalytics>? CandidatesAnalytics { get; set; }
 
 
     }
