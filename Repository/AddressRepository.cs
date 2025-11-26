@@ -42,7 +42,7 @@ namespace Assignment.Repository
             return address;
         }
 
-        public async Task<Address> UpdateAddressAsync(int id,Address address)
+        public async Task UpdateAddressAsync(int id,Address address)
         {
             if (id == null || id == 0)
             {
@@ -51,8 +51,15 @@ namespace Assignment.Repository
             {
                 throw new ArgumentNullException(nameof(address) + "Is Null (Thrown from UpdateAddressAsync)");
             }
+            Address? existingAddress = await GetAddressByIdAsync(id);
+            existingAddress.City = address.City;
+            existingAddress.Street = address.Street;
+            existingAddress.State = address.State;
+            existingAddress.PostalCode = address.PostalCode;
+            existingAddress.Country = address.Country;
+            existingAddress.LandlineNumber = address.LandlineNumber;
+            existingAddress.CandidateNumber = address.CandidateNumber;
             await _context.SaveChangesAsync();
-            return address;
         }
 
         public async Task DeleteAddressAsync(int id)
