@@ -13,6 +13,8 @@ namespace Assignment.Controllers
         }
 
         [HttpGet("api/candidates")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetCandidates()
         {
             try
@@ -27,6 +29,9 @@ namespace Assignment.Controllers
         }
 
         [HttpGet("api/candidates/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetCandidateById(int id)
         {
             try
@@ -45,6 +50,9 @@ namespace Assignment.Controllers
         }
 
         [HttpPost("api/candidates")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> AddCandidate([FromBody] Candidate candidate)
         {
             try
@@ -63,6 +71,9 @@ namespace Assignment.Controllers
         }
 
         [HttpPut("api/candidates/{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> UpdateCandidate(int id, [FromBody] Candidate candidate)
         {
             try
@@ -81,6 +92,9 @@ namespace Assignment.Controllers
         }
 
         [HttpDelete("api/candidates/{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> DeleteCandidate(int id)
         {
             try

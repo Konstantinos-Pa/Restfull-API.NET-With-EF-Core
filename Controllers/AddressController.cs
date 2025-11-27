@@ -15,6 +15,8 @@ namespace Assignment.Controllers
         }
 
         [HttpGet("api/addresses")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAddresses()
         {
             try
@@ -29,6 +31,9 @@ namespace Assignment.Controllers
         }
 
         [HttpGet("api/addresses/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAddressById(int id)
         {
             try
@@ -46,6 +51,9 @@ namespace Assignment.Controllers
             }
         }
 
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPost("api/addresses")]
         public async Task<IActionResult> AddAddress([FromBody] Address address)
         {
@@ -64,6 +72,9 @@ namespace Assignment.Controllers
             }
         }
 
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPut("api/addresses/{id}")]
         public async Task<IActionResult> UpdateAddress(int id, [FromBody] Address address)
         {
@@ -82,6 +93,9 @@ namespace Assignment.Controllers
             }
         }
 
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpDelete("api/addresses/{id}")]
         public async Task<IActionResult> DeleteAddress(int id)
         {
