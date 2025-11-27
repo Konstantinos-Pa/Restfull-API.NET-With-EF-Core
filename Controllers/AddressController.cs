@@ -62,8 +62,15 @@ namespace Assignment.Controllers
         {
             try
             {
-                var createdAddress = await _addressRepository.AddAddressAsync(address);
-                return CreatedAtAction(nameof(GetAddressById), new { id = createdAddress.Id }, createdAddress);
+                if (ModelState.IsValid)
+                {
+                    var createdAddress = await _addressRepository.AddAddressAsync(address);
+                    return CreatedAtAction(nameof(GetAddressById), new { id = createdAddress.Id }, createdAddress);
+                }
+                else
+                {
+                    return BadRequest(ModelState);
+                }
             }
             catch (ArgumentNullException ex)
             {
@@ -83,8 +90,15 @@ namespace Assignment.Controllers
         {
             try
             {
-                await _addressRepository.UpdateAddressAsync(id, address);
-                return NoContent();
+                if (ModelState.IsValid)
+                {
+                    await _addressRepository.UpdateAddressAsync(id, address);
+                    return NoContent();
+                }
+                    else
+                {
+                    return BadRequest(ModelState);
+                }
             }
             catch (ArgumentNullException ex)
             {

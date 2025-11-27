@@ -60,8 +60,15 @@ namespace Assignment.Controllers
         {
             try
             {
-                await _candidatesRepository.AddCandidateAsync(candidate);
-                return CreatedAtAction(nameof(GetCandidateById), new { id = candidate.CandidateNumber }, candidate);
+                if (ModelState.IsValid)
+                {
+                    await _candidatesRepository.AddCandidateAsync(candidate);
+                    return CreatedAtAction(nameof(GetCandidateById), new { id = candidate.CandidateNumber }, candidate);
+                }
+                else
+                {
+                    return BadRequest(ModelState);
+                }
             }
             catch (ArgumentNullException ex)
             {
@@ -81,8 +88,15 @@ namespace Assignment.Controllers
         {
             try
             {
-                await _candidatesRepository.UpdateCandidateAsync(id, candidate);
-                return NoContent();
+                if (ModelState.IsValid)
+                {
+                    await _candidatesRepository.UpdateCandidateAsync(id, candidate);
+                    return NoContent();
+                }
+                else
+                {
+                    return BadRequest(ModelState);
+                }
             }
             catch (ArgumentNullException ex)
             {
@@ -102,8 +116,15 @@ namespace Assignment.Controllers
         {
             try
             {
-                await _candidatesRepository.DeleteCandidateAsync(id);
-                return NoContent();
+                if (ModelState.IsValid)
+                {
+                    await _candidatesRepository.DeleteCandidateAsync(id);
+                    return NoContent();
+                }
+                    else
+                {
+                    return BadRequest(ModelState);
+                }
             }
             catch (ArgumentNullException ex)
             {
@@ -114,6 +135,7 @@ namespace Assignment.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
 
     }
 }
