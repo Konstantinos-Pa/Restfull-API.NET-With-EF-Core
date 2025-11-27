@@ -1,0 +1,103 @@
+﻿using Assignment.Models;
+using Assignment.Repository;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Assignment.Controllers
+{
+    public class AddressController : Controller
+    {
+
+        private readonly IAddressRepository _addressRepository;
+        public AddressController(IAddressRepository addressRepository)
+        {
+            _addressRepository = addressRepository;
+
+        }
+
+        [HttpGet("api/addresses")]
+        public async Task<IActionResult> GetAddresses()
+        {
+            try
+            {
+                var addresses = await _addressRepository.GetAddressesAsync();
+                return Ok(addresses);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpGet("api/addresses/{id}")]
+        public async Task<IActionResult> GetAddressById(int id)
+        {
+            try
+            {
+                var address = await _addressRepository.GetAddressByIdAsync(id);
+                return Ok(address);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPost("api/addresses")]
+        public async Task<IActionResult> AddAddress([FromBody] Address address)
+        {
+            try
+            {
+                var createdAddress = await _addressRepository.AddAddressAsync(address);
+                return CreatedAtAction(nameof(GetAddressById), new { id = createdAddress.Id }, createdAddress);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPut("api/addresses/{id}")]
+        public async Task<IActionResult> UpdateAddress(int id, [FromBody] Address address)
+        {
+            try
+            {
+                await _addressRepository.UpdateAddressAsync(id, address);
+                return NoContent();
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpDelete("api/addresses/{id}")]
+        public async Task<IActionResult> DeleteAddress(int id)
+        {
+            try
+            {
+                await _addressRepository.DeleteAddressAsync(id);
+                return NoContent();
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+    }
+}

@@ -1,6 +1,7 @@
 
 using Assignment.Service;
 using Microsoft.EntityFrameworkCore;
+using Assignment.Repository;
 
 namespace Assignment
 {
@@ -15,6 +16,10 @@ namespace Assignment
             {
                 option.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
+
+            builder.Services.AddTransient<ICandidatesRepository, CandidatesRepository>();
+            builder.Services.AddTransient<IAddressRepository, AddressRepository>();
+
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
