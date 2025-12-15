@@ -21,6 +21,18 @@ namespace Assignment
                 options.CustomSchemaIds(type => type.FullName);
             });
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(policy =>
+                {
+                    policy.WithOrigins("http://localhost:5173") // Frontend URL
+                          .AllowAnyMethod()  // GET, POST, etc.
+                          .AllowAnyHeader(); // Custom headers
+                });
+            });
+
+
+
             builder.Services.AddScoped<ICandidatesRepository, CandidatesRepository>();
             builder.Services.AddScoped<IAddressRepository, AddressRepository>();
             builder.Services.AddScoped<ICertificateRepository, CertificatesRepository>();
@@ -44,8 +56,9 @@ namespace Assignment
 
             app.UseHttpsRedirection();
 
-            app.UseAuthorization();
+            app.UseCors();
 
+            app.UseAuthorization();
 
             app.MapControllers();
 
