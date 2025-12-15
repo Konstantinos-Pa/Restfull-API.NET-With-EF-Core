@@ -89,6 +89,8 @@ namespace Assignment.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> PostCertificate([FromBody] CertificateDTO certificateDTO)
         {
+            try
+            {
                 var certificate = certificateDTO.Adapt<Certificate>();
                 if (!ModelState.IsValid)
                 {
@@ -103,6 +105,19 @@ namespace Assignment.Controllers
                     new { Id },
                     resultDto
                 );
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
 
