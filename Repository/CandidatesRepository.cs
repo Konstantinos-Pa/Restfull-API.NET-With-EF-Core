@@ -1,7 +1,6 @@
 ﻿using Assignment.Models;
 using Assignment.Service;
 using Microsoft.EntityFrameworkCore;
-using Project.Migrations;
 using System.Globalization;
 
 namespace Assignment.Repository
