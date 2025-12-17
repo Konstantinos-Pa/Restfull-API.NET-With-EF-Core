@@ -25,7 +25,7 @@ namespace Project_Bootcamp_2025.Authentication
                 var existedUser = await accountUser.FindByNameAsync(model.UserName);
                 if (existedUser != null)
                 {
-                    ModelState.AddModelError("", "User name is already taken.");
+                    ModelState.AddModelError("error", "User name is already taken.");
                     return BadRequest(ModelState);
                 }
                 var user = model.Adapt<AppUser>();
@@ -38,15 +38,14 @@ namespace Project_Bootcamp_2025.Authentication
                     var roleresult = await accountUser.AddToRoleAsync(user, AppRoles.Administrator);
                     if (roleresult.Succeeded)
                     {
-                        var token = GenerateToken(model.UserName);
-                        return Ok(new { token });
+                        return Ok();
                     }
                 }
                 //if there is are errors, add then to the ModelState object
                 //and return the error to the client
                 foreach (var error in result.Errors)
                 {
-                    ModelState.AddModelError(" ", error.Description);
+                    ModelState.AddModelError("error", error.Description);
                 }
             }
             return BadRequest(ModelState);
@@ -66,7 +65,7 @@ namespace Project_Bootcamp_2025.Authentication
                         return Ok(new { token });
                     }
                 }
-                ModelState.AddModelError("", "Invalid username or password");
+                ModelState.AddModelError("error", "Invalid username or password");
             }
             return BadRequest(ModelState);
         }
