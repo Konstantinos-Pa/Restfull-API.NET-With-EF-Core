@@ -36,9 +36,6 @@ namespace Assignment.DTOs
         public string? NativeLanguage { get; set; }
 
         [Required]
-        public string UserName { get; set; } = string.Empty;
-
-        [Required]
         public string? PhoneNumber { get; set; }
 
 

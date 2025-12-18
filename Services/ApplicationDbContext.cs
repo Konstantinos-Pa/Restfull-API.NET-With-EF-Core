@@ -1,7 +1,6 @@
 ﻿using Assignment.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel;
 
 namespace Assignment.Service
 {
@@ -25,17 +24,6 @@ namespace Assignment.Service
 
             protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.Entity<AppUser>(entity =>
-            //{
-            //    entity.HasOne(e => e.Candidate)
-            //        .WithOne(e => e.AppUser)
-            //        .HasForeignKey<AppUser>(e => e.CandidateId)
-            //        .IsRequired(false);
-
-            //    entity.Property(e => e.CreatedDate)
-            //        .HasDefaultValueSql("CURRENT_DATE");
-            //});
-            // Certificate entity configuration
             modelBuilder.Entity<Certificate>(entity =>
             {
                 entity.HasKey(e => e.Id); // Primary key

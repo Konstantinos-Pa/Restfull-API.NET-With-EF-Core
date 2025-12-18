@@ -34,7 +34,7 @@ namespace Project_Bootcamp_2025.Authentication
                 if (result.Succeeded)
                 {
                     //try to assign role
-                    var roleresult = await accountUser.AddToRoleAsync(user, AppRoles.User);
+                    var roleresult = await accountUser.AddToRoleAsync(user, AppRoles.Administrator);
                     if (roleresult.Succeeded)
                     {
                         return Ok();

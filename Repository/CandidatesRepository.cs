@@ -59,14 +59,6 @@ namespace Assignment.Repository
                 throw new ArgumentNullException(nameof(id) + "ID must be greater than zero. (Thrown from UpdateCandidateAsync)");
             }
             Candidate existingCandidate = await GetCandidateByIdAsync(id);
-            if ((_context.Candidates.FirstOrDefault(c => c.UserName==candidate.UserName))!=null)
-            {
-                throw new ArgumentException(nameof(candidate.UserName)+" already exists.");
-            }
-            else
-            {
-                existingCandidate.UserName = candidate.UserName;
-            }
             existingCandidate.FirstName = candidate.FirstName;
             existingCandidate.LastName = candidate.LastName;
             existingCandidate.MiddleName = candidate.MiddleName;
