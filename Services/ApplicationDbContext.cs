@@ -43,10 +43,13 @@ namespace Assignment.Service
                 entity.Property(e => e.ScoreReportDate)
                       .HasColumnType("date");
 
+                entity.Property(e => e.Price)
+                      .IsRequired();
+
                 // Relationships
-                entity.HasMany(c => c.Candidates)
+                entity.HasOne(c => c.Candidates)
                       .WithMany(c => c.Certificates)
-                      .UsingEntity(j => j.ToTable("CertificateCandidates"));
+                      .HasForeignKey(c => c.CandidateId);
 
                 entity.HasMany(c => c.CandidatesAnalytics)
                       .WithOne(ca => ca.Certificate)

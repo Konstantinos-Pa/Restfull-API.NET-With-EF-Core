@@ -8,6 +8,7 @@ namespace Assignment.Models
         public string? Title { get; set; }
 
         public string? AssessmentTestCode { get; set; }
+
         public string? Description { get; set; }
 
         public DateOnly ExaminationDate { get; set; }
@@ -22,8 +23,11 @@ namespace Assignment.Models
 
         public bool AssessmentResultLabel { get; set; }
 
+        public double Price { get; set; }
+
         //navigational properties
-        public ICollection<Candidate>? Candidates { get; set; }
+        public string? CandidateId { get; set; }
+        public Candidate? Candidates { get; set; }
 
         public ICollection<CandidatesAnalytics>? CandidatesAnalytics { get; set; }
 

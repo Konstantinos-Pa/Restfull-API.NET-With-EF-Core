@@ -10,9 +10,11 @@ namespace Assignment.Repository
     public class CandidatesRepository : ICandidatesRepository
     {
         private readonly ApplicationDbContext _context;
-        public CandidatesRepository(ApplicationDbContext context)
+        private readonly ICertificateRepository _certificateRepository;
+        public CandidatesRepository(ApplicationDbContext context, ICertificateRepository certificateRepository)
         {
             _context = context;
+            _certificateRepository = certificateRepository;
         }
 
         public async Task<List<Candidate>> GetCandidatesAsync()
@@ -82,37 +84,48 @@ namespace Assignment.Repository
 
             await _context.SaveChangesAsync();
         }
-
         public async Task AddCandidatesCertificateAsync(string candidateId, int certificateId)
         {
-            if (candidateId.IsNullOrEmpty())
+            if (string.IsNullOrEmpty(candidateId))
                 throw new ArgumentOutOfRangeException(nameof(candidateId));
 
             if (certificateId <= 0)
                 throw new ArgumentOutOfRangeException(nameof(certificateId));
 
             var candidate = await _context.Candidates
-                .Include(c => c.Certificates) // Ensure collection is loaded
+                .Include(c => c.Certificates)
                 .FirstOrDefaultAsync(c => c.Id == candidateId);
 
             if (candidate == null)
                 throw new InvalidOperationException("Candidate not found.");
 
             var certificate = await _context.Certificates
+                .AsNoTracking() // Important: avoid tracking the original
                 .FirstOrDefaultAsync(c => c.Id == certificateId);
 
             if (certificate == null)
                 throw new InvalidOperationException("Certificate not found.");
 
+            // Create a new copy of the certificate
+            var candidateCertificate = new Certificate
+            {
+                Title = certificate.Title,
+                Description = certificate.Description,
+                AssessmentTestCode = certificate.AssessmentTestCode,
+                ExaminationDate = DateOnly.FromDateTime(DateTime.Now).AddDays(10),
+                Price = certificate.Price,
+                // Copy any other relevant fields
+            };
+
+            int newCertificateId = await _certificateRepository.AddCertificateAsync(candidateCertificate);
+
             // Initialize collection if null
             candidate.Certificates ??= new List<Certificate>();
 
-            if (!candidate.Certificates.Any(c => c.Id == certificateId))
-            {
-                candidate.Certificates.Add(certificate);
-                await _context.SaveChangesAsync();
-            }
+            candidate.Certificates.Add(candidateCertificate);
+            await _context.SaveChangesAsync();
         }
+
 
         public async Task RemoveCandidatesCertificateAsync(string candidateId, int certificateId)
         {

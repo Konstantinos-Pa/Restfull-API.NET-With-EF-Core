@@ -28,6 +28,9 @@ namespace Assignment.DTOs
 
         public bool AssessmentResultLabel { get; set; }
 
+        [Required]
+        public double Price { get; set; }
+
         public List<Candidate> candidates { get; set; }= new List<Candidate>();
        
     }

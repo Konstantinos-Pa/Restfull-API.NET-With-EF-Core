@@ -72,6 +72,7 @@ namespace Assignment.Repository
             existingCertificate.CandidateScore = certificate.CandidateScore;
             existingCertificate.MaximumScore = certificate.MaximumScore;
             existingCertificate.PercentageScore = certificate.PercentageScore;
+            existingCertificate.Price = certificate.Price;
             existingCertificate.AssessmentResultLabel = certificate.AssessmentResultLabel;
 
             await _context.SaveChangesAsync();
