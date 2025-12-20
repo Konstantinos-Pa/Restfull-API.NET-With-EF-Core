@@ -60,7 +60,7 @@ namespace Assignment.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> PutCertificate([FromRoute]int certificateId, [FromBody] CertificateDTO certificateDTO)
+        public async Task<IActionResult> PutCertificate([FromRoute]int id, [FromBody] CertificateDTO certificateDTO)
         {
             try
             {
@@ -70,7 +70,7 @@ namespace Assignment.Controllers
                     return BadRequest(ModelState);
                 }
 
-                await _context.UpdateCertificateAsync(certificateId, certificate);
+                await _context.UpdateCertificateAsync(id, certificate);
 
                 return NoContent();
             }
