@@ -12,9 +12,8 @@ namespace Assignment.Models
 
         public int PossibleMarks { get; set; }
 
-        public int CertificateId { get; set; }  
         //navigational property
-        public Certificate? Certificate { get; set; }
+        public List<Certificate>? Certificate { get; set; }
 
         public ICollection<Question>? Questions { get; set; }
     }

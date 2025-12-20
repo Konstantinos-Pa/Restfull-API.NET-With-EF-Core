@@ -9,16 +9,16 @@ namespace Assignment.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CertificatesController : ControllerBase
+    public class SaleCertificatesController : ControllerBase
     {
-        private readonly ICertificateRepository _context;
+        private readonly ISaleCertificatesRepository _context;
 
-        public CertificatesController(ICertificateRepository context)
+        public SaleCertificatesController(ISaleCertificatesRepository context)
         {
             _context = context;
         }
 
-        // GET: api/Certificates
+        // GET: api/SaleCertificates
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -26,8 +26,8 @@ namespace Assignment.Controllers
         {
             try
             {
-                var certificates = await _context.GetCertificatesAsync();
-                return Ok(certificates.Adapt<List<CertificateDTO>>());
+                var SaleCertificates = await _context.GetSaleCertificatesAsync();
+                return Ok(SaleCertificates.Adapt<List<SaleCertificateDTO>>());
             }
             catch (Exception ex)
             {
@@ -39,12 +39,12 @@ namespace Assignment.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetCertificateById([FromRoute] int id)
+        public async Task<IActionResult> GetSaleCertificateById([FromRoute] int id)
         {
             try
             {
-                var certificate = await _context.GetCertificateByIdAsync(id);
-                return Ok(certificate.Adapt<CertificateDTO>());
+                var SaleCertificate = await _context.GetSaleCertificateByIdAsync(id);
+                return Ok(SaleCertificate.Adapt<SaleCertificateDTO>());
             }
             catch (ArgumentNullException ex)
             {
@@ -60,17 +60,17 @@ namespace Assignment.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> PutCertificate([FromRoute]int id, [FromBody] CertificateDTO certificateDTO)
+        public async Task<IActionResult> PutSaleCertificate([FromRoute]int id, [FromBody] SaleCertificateDTO SaleCertificateDTO)
         {
             try
             {
-                var certificate = certificateDTO.Adapt<Certificate>();
+                var SaleCertificate = SaleCertificateDTO.Adapt<SaleCertificate>();
                 if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);
                 }
 
-                await _context.UpdateCertificateAsync(id, certificate);
+                await _context.UpdateSaleCertificateAsync(id, SaleCertificate);
 
                 return NoContent();
             }
@@ -87,21 +87,21 @@ namespace Assignment.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> PostCertificate([FromBody] CertificateDTO certificateDTO)
+        public async Task<IActionResult> PostSaleCertificate([FromBody] SaleCertificateDTO SaleCertificateDTO)
         {
             try
             {
-                var certificate = certificateDTO.Adapt<Certificate>();
+                var SaleCertificate = SaleCertificateDTO.Adapt<SaleCertificate>();
                 if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);
                 }
 
-                int Id = await _context.AddCertificateAsync(certificate);
-                var resultDto = certificate.Adapt<CertificateDTO>();
+                int Id = await _context.AddSaleCertificateAsync(SaleCertificate);
+                var resultDto = SaleCertificate.Adapt<SaleCertificateDTO>();
 
                 return CreatedAtAction(
-                    nameof(GetCertificateById),
+                    nameof(GetSaleCertificateById),
                     new { Id },
                     resultDto
                 );
@@ -121,16 +121,16 @@ namespace Assignment.Controllers
         }
 
 
-        // DELETE: api/certificates/id
+        // DELETE: api/SaleCertificates/id
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> DeleteCertificate([FromRoute] int id)
+        public async Task<IActionResult> DeleteSaleCertificate([FromRoute] int id)
         {
             try
             {
-                await _context.DeleteCertificateAsync(id);
+                await _context.DeleteSaleCertificateAsync(id);
                 return NoContent();
             }
             catch (ArgumentNullException ex)
@@ -143,58 +143,7 @@ namespace Assignment.Controllers
             }
         }
 
-
-        [HttpPut("{CId:int}/{CAId:int}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> AddCertificateCandidateAnalitycsAsync([FromRoute] int CId, [FromRoute] int CAId)
-        {
-            try
-            {
-                await _context.AddCertificateCandidateAnalitycsAsync(CId, CAId);
-                return NoContent();
-            }
-            catch (ArgumentOutOfRangeException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (InvalidOperationException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
-
-        [HttpPut("remove/{CId:int}/{CAId:int}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> RemoveCandidatesCertificate([FromRoute] int CId, [FromRoute] int CAId)
-        {
-            try
-            {
-                await _context.RemoveCertificateCandidateAnalitycsAsync(CId, CAId);
-                return NoContent();
-            }
-            catch (ArgumentOutOfRangeException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (InvalidOperationException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
-
-
+        
     }
 
 }

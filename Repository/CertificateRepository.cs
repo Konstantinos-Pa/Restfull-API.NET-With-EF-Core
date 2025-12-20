@@ -91,13 +91,52 @@ namespace Assignment.Repository
             await _context.SaveChangesAsync();
         }
 
+        public async Task AddCertificateCandidateAnalitycsAsync(int CId, int CAId)
+        {
+            if (CId <= 0 || CAId <= 0)
+            {
+                throw new ArgumentNullException("Id's must be greater than zero. (addCertificateCandidateAnalitycsAsync)");
+            }
 
+            Certificate? existingCertificate = await _context.Certificates.Include(e => e.CandidatesAnalytics).FirstOrDefaultAsync(e => e.Id == CId);
 
+            if (existingCertificate == null)
+                throw new InvalidOperationException("Certificate not found.");
 
+            // Initialize collection if null
+            existingCertificate.CandidatesAnalytics ??= new List<CandidatesAnalytics>();
+
+            CandidatesAnalytics? candidatesAnalytics = await _context.CandidatesAnalytics.FirstOrDefaultAsync(e => e.Id == CAId);
+
+            if (candidatesAnalytics == null)
+                throw new InvalidOperationException("Candidates Analytics not found.");
+
+            existingCertificate.CandidatesAnalytics.Add(candidatesAnalytics);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task RemoveCertificateCandidateAnalitycsAsync(int CId, int CAId)
+        {
+            if (CId <= 0 || CAId <= 0)
+            {
+                throw new ArgumentNullException("Id's must be greater than zero. (addCertificateCandidateAnalitycsAsync)");
+            }
+
+            Certificate? existingCertificate = await _context.Certificates.Include(e => e.CandidatesAnalytics).FirstOrDefaultAsync(e => e.Id == CId);
+
+            if (existingCertificate == null)
+                throw new InvalidOperationException("Certificate not found.");
+
+            // Initialize collection if null
+            existingCertificate.CandidatesAnalytics ??= new List<CandidatesAnalytics>();
+
+            CandidatesAnalytics? candidatesAnalytics = await _context.CandidatesAnalytics.FirstOrDefaultAsync(e => e.Id == CAId);
+
+            if (candidatesAnalytics == null)
+                throw new InvalidOperationException("Candidates Analytics not found.");
+
+            existingCertificate.CandidatesAnalytics.Remove(candidatesAnalytics);
+            await _context.SaveChangesAsync();
+        }
     }
-
-
-
-
-
 }

@@ -11,6 +11,8 @@ namespace Assignment.Repository
         Task<Certificate> GetCertificateByIdAsync(int id);
         Task UpdateCertificateAsync(int id, Certificate certificate);
         Task<int> AddCertificateAsync(Certificate certificate);
+        Task AddCertificateCandidateAnalitycsAsync(int CId, int CAId);
+        Task RemoveCertificateCandidateAnalitycsAsync(int CId, int CAId);
 
 
 

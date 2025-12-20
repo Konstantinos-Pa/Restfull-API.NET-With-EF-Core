@@ -43,15 +43,6 @@ public class CandidatesAnalyticsRepository: ICandidatesAnalyticsRepository
             {
                 throw new ArgumentNullException(nameof(analytics) + " Is Null (Thrown from AddCandidatesAnalyticsAsync)");
             }
-            if (analytics.CertificateId == 0)
-            {
-                throw new ArgumentNullException(nameof(analytics.CertificateId) + " Is Null (Thrown from AddCandidatesAnalyticsAsync)");
-            }
-            Certificate? certificate = await _context.Certificates.FirstOrDefaultAsync(c => c.Id == analytics.CertificateId);
-            if (certificate == null)
-            {
-                throw new ArgumentException("Didn't find any certificates specified");
-            }
             _context.CandidatesAnalytics.Add(analytics);
             await _context.SaveChangesAsync();
             return analytics.Id;
@@ -75,7 +66,6 @@ public class CandidatesAnalyticsRepository: ICandidatesAnalyticsRepository
             existing.TopicDescription = analytics.TopicDescription;
             existing.AwardedMarks = analytics.AwardedMarks;
             existing.PossibleMarks = analytics.PossibleMarks;
-            existing.CertificateId = analytics.CertificateId;
 
             await _context.SaveChangesAsync();
         }

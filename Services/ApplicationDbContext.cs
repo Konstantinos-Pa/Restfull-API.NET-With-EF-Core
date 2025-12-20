@@ -19,6 +19,7 @@ namespace Assignment.Service
         public DbSet<Address> Addresses { get; set; }
         public DbSet<CandidatesAnalytics> CandidatesAnalytics { get; set; }
         public DbSet<Certificate> Certificates { get; set; }
+        public DbSet<SaleCertificate> SaleCertificates { get; set; }
         public DbSet<PhotoId> photoIds { get; set; }
         public DbSet<Question> Questions { get; set; }
 
@@ -53,9 +54,7 @@ namespace Assignment.Service
                       .HasForeignKey(c => c.CandidateId);
 
                 entity.HasMany(c => c.CandidatesAnalytics)
-                      .WithOne(ca => ca.Certificate)
-                      .HasForeignKey(ca => ca.CertificateId)
-                      .OnDelete(DeleteBehavior.Cascade);
+                      .WithMany(ca => ca.Certificate);
             });
 
             modelBuilder.Entity<PhotoId>(entity =>
@@ -82,9 +81,6 @@ namespace Assignment.Service
             {
                 entity.HasKey(e => e.Id);
 
-                entity.HasOne(e => e.Certificate)
-                    .WithMany(e => e.CandidatesAnalytics)
-                    .HasForeignKey(e => e.CertificateId);
             });
 
             modelBuilder.Entity<Address>(entity =>
@@ -181,7 +177,15 @@ namespace Assignment.Service
                     .HasForeignKey(e=>e.CandidatesAnalyticsId);
             });
 
+            modelBuilder.Entity<SaleCertificate>(entity => 
+            {
 
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.Price)
+                .IsRequired();
+
+            });
 
             base.OnModelCreating(modelBuilder);
         }

@@ -99,7 +99,7 @@ namespace Assignment.Repository
             if (candidate == null)
                 throw new InvalidOperationException("Candidate not found.");
 
-            var certificate = await _context.Certificates
+            var certificate = await _context.SaleCertificates
                 .AsNoTracking() // Important: avoid tracking the original
                 .FirstOrDefaultAsync(c => c.Id == certificateId);
 
@@ -152,6 +152,7 @@ namespace Assignment.Repository
             if (candidate.Certificates != null && candidate.Certificates.Any(c => c.Id == certificateId))
             {
                 candidate.Certificates.Remove(certificate);
+                _context.Certificates.Remove(certificate);
                 await _context.SaveChangesAsync();
             }
         }
