@@ -44,6 +44,7 @@ namespace Project_Bootcamp_2025.Authentication
             {
                 ModelState.AddModelError("error", error.Description);
             }
+            return BadRequest(ModelState);
 
         }
         [HttpPost("login")]
