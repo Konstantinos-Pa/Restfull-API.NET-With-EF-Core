@@ -1,4 +1,3 @@
-using Assignment.DTOs;
 using Assignment.Models;
 using Assignment.Repository;
 using Assignment.Service;
@@ -111,6 +110,8 @@ namespace Assignment
 
 
             var app = builder.Build();
+
+            app.UseGlobalExceptionHandling();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
