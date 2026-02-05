@@ -3,7 +3,7 @@ The packets i use are:
 🤖 AI / OpenAI
 
 OpenAI (2.8.0)
-Official OpenAI SDK (non-Azure)
+Official OpenAI SDK (non-Azure / To use it you need an API Key from Open AI)
 
 🗺️ Object Mapping
 
