@@ -2,6 +2,7 @@
 using Assignment.Models;
 using Assignment.Repository;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
@@ -10,6 +11,7 @@ namespace Assignment.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Policy = AppPolicies.RequireUserRole)]
     public class PhotoIdController : ControllerBase
     {
         private readonly IPhotoIdRepository _repository;

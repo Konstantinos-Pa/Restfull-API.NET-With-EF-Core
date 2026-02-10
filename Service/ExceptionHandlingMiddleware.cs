@@ -22,7 +22,7 @@ namespace Assignment.Service
                     var error = new
                     {
                         message = "An unexpected error occurred",
-                        //detail = ex.Message // remove in production
+                        detail = ex.Message // remove in production
                     };
 
                     await context.Response.WriteAsJsonAsync(error);

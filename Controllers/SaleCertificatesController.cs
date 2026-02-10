@@ -2,6 +2,7 @@
 using Assignment.Models;
 using Assignment.Repository;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -60,6 +61,7 @@ namespace Assignment.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Policy = AppPolicies.RequireAdministratorRole)]
         public async Task<IActionResult> PutSaleCertificate([FromRoute]int id, [FromBody] SaleCertificateDTO SaleCertificateDTO)
         {
             try
@@ -83,6 +85,7 @@ namespace Assignment.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Policy = AppPolicies.RequireAdministratorRole)]
         public async Task<IActionResult> PostSaleCertificate([FromBody] SaleCertificateDTO SaleCertificateDTO)
         {
             try
@@ -118,6 +121,7 @@ namespace Assignment.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Policy = AppPolicies.RequireAdministratorRole)]
         public async Task<IActionResult> DeleteSaleCertificate([FromRoute] int id)
         {
             try

@@ -2,6 +2,7 @@
 using Assignment.Models;
 using Assignment.Repository;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -22,6 +23,7 @@ namespace Assignment.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Policy = AppPolicies.RequireUserRole)]
         public async Task<IActionResult> GetCertifiicate()
         {
             try
@@ -39,6 +41,7 @@ namespace Assignment.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Policy = AppPolicies.RequireUserRole)]
         public async Task<IActionResult> GetCertificateById([FromRoute] int id)
         {
             try
@@ -60,6 +63,7 @@ namespace Assignment.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Policy = AppPolicies.RequireAdministratorRole)]
         public async Task<IActionResult> PutCertificate([FromRoute]int id, [FromBody] CertificateDTO certificateDTO)
         {
             try
@@ -83,6 +87,7 @@ namespace Assignment.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Policy = AppPolicies.RequireUserRole)]
         public async Task<IActionResult> PostCertificate([FromBody] CertificateDTO certificateDTO)
         {
             try
@@ -118,6 +123,7 @@ namespace Assignment.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Policy = AppPolicies.RequireAdministratorRole)]
         public async Task<IActionResult> DeleteCertificate([FromRoute] int id)
         {
             try
@@ -140,6 +146,7 @@ namespace Assignment.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Policy = AppPolicies.RequireUserRole)]
         public async Task<IActionResult> AddCertificateCandidateAnalitycsAsync([FromRoute] int CId, [FromRoute] int CAId)
         {
             try
@@ -165,6 +172,7 @@ namespace Assignment.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Policy = AppPolicies.RequireUserRole)]
         public async Task<IActionResult> RemoveCandidatesCertificate([FromRoute] int CId, [FromRoute] int CAId)
         {
             try

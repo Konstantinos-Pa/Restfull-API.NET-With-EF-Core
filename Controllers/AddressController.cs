@@ -11,7 +11,8 @@ namespace Assignment.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(Roles = $"{AppRoles.User}")]
+    [Authorize(Policy = AppPolicies.RequireUserRole)]
+
     public class AddressController : ControllerBase
     {
 

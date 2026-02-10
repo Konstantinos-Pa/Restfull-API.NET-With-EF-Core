@@ -1,13 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Assignment.DTOs;
 using Assignment.Models;
-using Assignment.DTOs;
 using Assignment.Repository;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Assignment.Controllers
 {
+
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Policy = AppPolicies.RequireUserRole)]
     public class CandidatesAnalyticsController : ControllerBase
     {
         private readonly ICandidatesAnalyticsRepository _repository;

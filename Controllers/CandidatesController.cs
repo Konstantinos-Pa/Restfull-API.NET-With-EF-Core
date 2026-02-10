@@ -11,7 +11,6 @@ namespace Assignment.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(Roles = $"{AppRoles.User}")]
     public class CandidatesController : ControllerBase
     {
         private readonly ICandidatesRepository _candidatesRepository;
@@ -24,6 +23,7 @@ namespace Assignment.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Policy = AppPolicies.RequireUserRole)]
         public async Task<IActionResult> GetCandidates()
         {
             try
@@ -41,6 +41,7 @@ namespace Assignment.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Policy = AppPolicies.RequireAdministratorRole)]
         public async Task<IActionResult> GetCandidateById([FromRoute] string id)
         {
             try
@@ -62,6 +63,7 @@ namespace Assignment.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Policy = AppPolicies.RequireUserRole)]
         public async Task<IActionResult> GetCandidateByUserName([FromRoute] string username)
         {
             try
@@ -83,6 +85,7 @@ namespace Assignment.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Policy = AppPolicies.RequireAdministratorRole)]
         public async Task<IActionResult> UpdateCandidate([FromRoute] string id, [FromBody] CandidateRUDDTO candidateDTO)
         {
             try
@@ -109,6 +112,7 @@ namespace Assignment.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Policy = AppPolicies.RequireUserRole)]
         public async Task<IActionResult> AddCandidatesCertificate([FromRoute] string id, [FromRoute] int CId)
         {
             try
@@ -134,6 +138,7 @@ namespace Assignment.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Policy = AppPolicies.RequireAdministratorRole)]
         public async Task<IActionResult> RemoveCandidatesCertificate([FromRoute] string id, [FromRoute] int CId)
         {
             try
@@ -159,6 +164,7 @@ namespace Assignment.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Policy = AppPolicies.RequireAdministratorRole)]
         public async Task<IActionResult> DeleteCandidate([FromRoute] string id)
         {
             try
@@ -181,6 +187,7 @@ namespace Assignment.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Policy = AppPolicies.RequireUserRole)]
         public async Task<IActionResult> GetMarksPerTopicPerCertificateByCandidate([FromRoute] string id)
         {
             try
@@ -209,6 +216,7 @@ namespace Assignment.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Policy = AppPolicies.RequireAdministratorRole)]
         public async Task<IActionResult> GetObtainedCertificatesByCandidate([FromRoute] string id)
         {
             try
@@ -237,6 +245,7 @@ namespace Assignment.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Policy = AppPolicies.RequireAdministratorRole)]
         public async Task<IActionResult> GetNotObtainedCertificatesByCandidate([FromRoute] string id)
         {
             try
@@ -264,6 +273,7 @@ namespace Assignment.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Policy = AppPolicies.RequireUserRole)]
         public async Task<IActionResult> GetCertificatesByDate([FromRoute] string id)
         {
             try
@@ -291,6 +301,7 @@ namespace Assignment.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Policy = AppPolicies.RequireUserRole)]
         public async Task<IActionResult> GetCertificateCountsByDateRange([FromRoute] string id, [FromRoute] string StartD, [FromRoute] string EndD)
         {
             try

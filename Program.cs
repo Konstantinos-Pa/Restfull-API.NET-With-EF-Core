@@ -123,9 +123,9 @@ namespace Assignment
 
             builder.Services.AddAuthorization(options =>
             {
-                options.AddPolicy("RequireAdministratorRole", policy =>
+                options.AddPolicy(AppPolicies.RequireAdministratorRole, policy =>
                 policy.RequireRole(AppRoles.Administrator));
-                options.AddPolicy("RequireUserRole", policy =>
+                options.AddPolicy(AppPolicies.RequireUserRole, policy =>
                 policy.RequireRole(AppRoles.User));
             });
 

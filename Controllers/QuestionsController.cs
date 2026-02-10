@@ -2,6 +2,7 @@
 using Assignment.Models;
 using Assignment.Repository;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
@@ -22,6 +23,7 @@ namespace Assignment.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Policy = AppPolicies.RequireUserRole)]
         public async Task<IActionResult> GetQuestions()
         {
             try
@@ -39,6 +41,7 @@ namespace Assignment.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Policy = AppPolicies.RequireUserRole)]
         public async Task<IActionResult> GetQuestionsById([FromRoute] int id)
         {
             try
@@ -60,6 +63,7 @@ namespace Assignment.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Policy = AppPolicies.RequireAdministratorRole)]
         public async Task<IActionResult> PostQuestions([FromBody] QuestionDTO QuestionDTO)
         {
                 var question = QuestionDTO.Adapt<Question>();
@@ -80,6 +84,7 @@ namespace Assignment.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Policy = AppPolicies.RequireAdministratorRole)]
         public async Task<IActionResult> PutQuestions([FromRoute] int id, [FromBody] QuestionDTO questionDTO)
         {
             try
@@ -103,6 +108,7 @@ namespace Assignment.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Policy = AppPolicies.RequireAdministratorRole)]
         public async Task<IActionResult> DeleteQuestions([FromRoute] int id)
         {
             try
@@ -124,6 +130,7 @@ namespace Assignment.Controllers
         [HttpGet("Random/{number:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Policy = AppPolicies.RequireUserRole)]
         public async Task<IActionResult> GetRandomQuestions(int number)
         {
             try
