@@ -2,21 +2,32 @@
 using Assignment.Models;
 using Assignment.Service;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Assignment.Repository
 {
     public class SaleCertificatesRepository : ISaleCertificatesRepository
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMemoryCache _memoryCache;
+        private const string SaleCertificatesCacheKey = "SaleCertificatesCacheKey";
 
-        public SaleCertificatesRepository(ApplicationDbContext context)
+        public SaleCertificatesRepository(ApplicationDbContext context, IMemoryCache memoryCache)
         {
             _context = context;
+            _memoryCache = memoryCache;
         }
 
         public async Task<List<SaleCertificate>> GetSaleCertificatesAsync()
         {
-            return await _context.SaleCertificates.ToListAsync();
+            var output = _memoryCache.Get<List<SaleCertificate>>(SaleCertificatesCacheKey);
+
+            if (output == null)
+            {
+                output = await _context.SaleCertificates.ToListAsync();
+                _memoryCache.Set(SaleCertificatesCacheKey, output, TimeSpan.FromDays(1)); // Cache for 1 Day because SaleCertificates are not expected to change frequently
+            }
+            return output;
         }
 
         public async Task<SaleCertificate> GetSaleCertificateByIdAsync(int id)

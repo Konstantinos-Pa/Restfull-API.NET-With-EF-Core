@@ -6,7 +6,7 @@ namespace Assignment.Repository
 
     public interface ICertificateRepository
     {
-        Task<List<Certificate>> GetCertificatesAsync();
+        Task<List<Certificate>> GetCertificatesAsync(string CandidateId);
         Task DeleteCertificateAsync(int id);
         Task<Certificate> GetCertificateByIdAsync(int id);
         Task UpdateCertificateAsync(int id, Certificate certificate);

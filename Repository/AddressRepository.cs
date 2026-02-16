@@ -1,18 +1,23 @@
-﻿using Assignment.Models;
-using Assignment.DTOs;
+﻿using Assignment.DTOs;
+using Assignment.Models;
 using Assignment.Service;
-using Microsoft.EntityFrameworkCore;
 using Mapster;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.IdentityModel.Tokens;
+using System.Net;
 
 namespace Assignment.Repository
 {
     public class AddressRepository : IAddressRepository
     {
         private readonly ApplicationDbContext _context;
-        public AddressRepository(ApplicationDbContext context)
+        private readonly IMemoryCache _memoryCache;
+
+        public AddressRepository(ApplicationDbContext context, IMemoryCache memoryCache)
         {
             _context = context;
+            _memoryCache = memoryCache;
         }
 
         public async Task<List<Address>> GetAddressesAsync()
@@ -40,12 +45,16 @@ namespace Assignment.Repository
             {
                 throw new ArgumentNullException(nameof(id) + " is Null. (Thrown from GetAddressByCandidateIdAsync)");
             }
-            Address? address = await _context.Addresses.FirstOrDefaultAsync(a => a.CandidateId == id);
-            if (address == null)
+            var output = _memoryCache.Get<Address>(id);
+            if (output == null)
             {
-                throw new Exception("Address not found (Thrown from GetAddressByCandidateIdAsync)");
+                output = await _context.Addresses.FirstOrDefaultAsync(a => a.CandidateId == id);
+                if (output == null)
+                {
+                    throw new Exception("Address not found (Thrown from GetAddressByCandidateIdAsync)");
+                }
             }
-            return address;
+            return output;
         }
 
         public async Task<int> AddAddressAsync(Address address)

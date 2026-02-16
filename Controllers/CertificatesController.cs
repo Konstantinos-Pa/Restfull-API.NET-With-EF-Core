@@ -19,16 +19,16 @@ namespace Assignment.Controllers
             _context = context;
         }
 
-        // GET: api/Certificates
-        [HttpGet]
+        // GET: api/Certificates/"CandidateId"
+        [HttpGet("{CandidateId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Authorize(Policy = AppPolicies.RequireUserRole)]
-        public async Task<IActionResult> GetCertifiicate()
+        public async Task<IActionResult> GetCertifiicate([FromRoute]string CandidateId)
         {
             try
             {
-                var certificates = await _context.GetCertificatesAsync();
+                var certificates = await _context.GetCertificatesAsync(CandidateId);
                 return Ok(certificates.Adapt<List<CertificateDTO>>());
             }
             catch (Exception ex)
@@ -101,7 +101,7 @@ namespace Assignment.Controllers
                     nameof(GetCertificateById),
                     new { Id },
                     resultDto
-                );
+               );
             }
             catch (ArgumentNullException ex)
             {

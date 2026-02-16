@@ -23,7 +23,7 @@ namespace Assignment.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [Authorize(Policy = AppPolicies.RequireUserRole)]
+        [Authorize(Policy = AppPolicies.RequireAdministratorRole)]
         public async Task<IActionResult> GetCandidates()
         {
             try
@@ -85,7 +85,7 @@ namespace Assignment.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [Authorize(Policy = AppPolicies.RequireAdministratorRole)]
+        [Authorize(Policy = AppPolicies.RequireUserRole)]
         public async Task<IActionResult> UpdateCandidate([FromRoute] string id, [FromBody] CandidateRUDDTO candidateDTO)
         {
             try
@@ -216,7 +216,7 @@ namespace Assignment.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [Authorize(Policy = AppPolicies.RequireAdministratorRole)]
+        [Authorize(Policy = AppPolicies.RequireUserRole)]
         public async Task<IActionResult> GetObtainedCertificatesByCandidate([FromRoute] string id)
         {
             try
@@ -245,7 +245,7 @@ namespace Assignment.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [Authorize(Policy = AppPolicies.RequireAdministratorRole)]
+        [Authorize(Policy = AppPolicies.RequireUserRole)]
         public async Task<IActionResult> GetNotObtainedCertificatesByCandidate([FromRoute] string id)
         {
             try

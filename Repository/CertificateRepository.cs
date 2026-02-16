@@ -2,21 +2,30 @@
 using Assignment.Models;
 using Assignment.Service;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Assignment.Repository
 {
     public class CertificatesRepository : ICertificateRepository
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMemoryCache _memoryCache;
 
-        public CertificatesRepository(ApplicationDbContext context)
+        public CertificatesRepository(ApplicationDbContext context, IMemoryCache memoryCache)
         {
             _context = context;
+            _memoryCache = memoryCache;
         }
 
-        public async Task<List<Certificate>> GetCertificatesAsync()
+        public async Task<List<Certificate>> GetCertificatesAsync(string CandidateId)
         {
-            return await _context.Certificates.ToListAsync();
+            var output = _memoryCache.Get<List<Certificate>>(CandidateId);
+            if (output == null)
+            {
+                output = await _context.Certificates.Where(c => c.CandidateId == CandidateId).ToListAsync();
+                _memoryCache.Set(CandidateId, output, TimeSpan.FromMinutes(1)); // Cache for 1 minutes because Certificates can change more frequently than SaleCertificates, especially when candidates are taking exams and receiving new certificates.
+            }
+            return output;
         }
 
         public async Task<Certificate> GetCertificateByIdAsync(int id)

@@ -69,6 +69,8 @@ namespace Assignment
             builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             builder.Services.AddSingleton<IAiRoutingService, AiRoutingService>();
 
+            builder.Services.AddMemoryCache();
+
             builder.Services.AddControllers(options =>
             {
                 // Add global model validation filter

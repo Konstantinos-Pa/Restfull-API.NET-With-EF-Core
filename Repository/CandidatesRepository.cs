@@ -1,6 +1,7 @@
 ﻿using Assignment.Models;
 using Assignment.Service;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.IdentityModel.Tokens;
 using NuGet.ContentModel;
 using System.Globalization;
@@ -11,15 +12,25 @@ namespace Assignment.Repository
     {
         private readonly ApplicationDbContext _context;
         private readonly ICertificateRepository _certificateRepository;
-        public CandidatesRepository(ApplicationDbContext context, ICertificateRepository certificateRepository)
+        private readonly IMemoryCache _memoryCache;
+        private const string CandidatesCacheKey = "CandidatesCacheKey";
+
+        public CandidatesRepository(ApplicationDbContext context, ICertificateRepository certificateRepository, IMemoryCache memoryCache)
         {
             _context = context;
             _certificateRepository = certificateRepository;
+            _memoryCache = memoryCache;
         }
 
         public async Task<List<Candidate>> GetCandidatesAsync()
         {
-            return await _context.Candidates.ToListAsync();
+            var output = _memoryCache.Get<List<Candidate>>(CandidatesCacheKey);
+            if (output == null)
+            {
+                output = await _context.Candidates.ToListAsync();
+                _memoryCache.Set(CandidatesCacheKey, output, TimeSpan.FromMinutes(5));
+            }
+            return output;
         }
 
         public async Task<Candidate> GetCandidateByIdAsync(string id)
@@ -42,10 +53,15 @@ namespace Assignment.Repository
             {
                 throw new ArgumentNullException(nameof(username) + " is Null. (Thrown from GetCandidateByUserNameAsync)");
             }
-            Candidate? candidate = await _context.Candidates.FirstOrDefaultAsync(c => c.UserName == username);
+            var candidate = _memoryCache.Get<Candidate>(CandidatesCacheKey + "_" + username);
             if (candidate == null)
             {
-                throw new Exception("Candidate not found (Thrown from GetCandidateByIdAsync)");
+                candidate = await _context.Candidates.FirstOrDefaultAsync(c => c.UserName == username);
+                if (candidate == null)
+                {
+                    throw new Exception("Candidate not found (Thrown from GetCandidateByUserNameAsync)");
+                }
+                _memoryCache.Set(CandidatesCacheKey + "_" + username, candidate, TimeSpan.FromMinutes(5));
             }
             return candidate;
         }
@@ -70,7 +86,7 @@ namespace Assignment.Repository
             existingCandidate.NativeLanguage = candidate.NativeLanguage;
             existingCandidate.PhoneNumber = candidate.PhoneNumber;
 
-        await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
         public async Task DeleteCandidateAsync(string id)
@@ -175,7 +191,8 @@ namespace Assignment.Repository
                 throw new KeyNotFoundException("No certificates found for the candidate (Thrown from MarksPerTopicPerCertificateAsync)");
             }
 
-            var marksPerTopicWithTitle = certificates.Select(c => new {
+            var marksPerTopicWithTitle = certificates.Select(c => new
+            {
                 CertificateId = c.Id,
                 CertificateTitle = c.Title,
                 Analytics = c.CandidatesAnalytics?.ToDictionary(
@@ -198,18 +215,21 @@ namespace Assignment.Repository
             {
                 throw new ArgumentNullException(nameof(id), " must be greater than zero.");
             }
-
-            var candidates = await _context.Candidates
-            .Include(c => c.Certificates!)
-            .FirstOrDefaultAsync(c => c.Id == id);
-
-            if (candidates == null)
+            var output = _memoryCache.Get<List<Certificate>>(CandidatesCacheKey + "_Obtained_" + id);
+            if (output == null)
             {
-                throw new KeyNotFoundException($"Candidate with id {id} not found.");
-            }
+                var candidates = await _context.Candidates
+                .Include(c => c.Certificates!)
+                .FirstOrDefaultAsync(c => c.Id == id);
+                output = candidates?.Certificates?.ToList() ?? new List<Certificate>();
 
-            List<Certificate> listOfCertificates = candidates.Certificates?.ToList() ?? new List<Certificate>();
-            return listOfCertificates;
+                if (candidates == null)
+                {
+                    throw new KeyNotFoundException($"Candidate with id {id} not found.");
+                }
+                _memoryCache.Set(CandidatesCacheKey + "_Obtained_" + id, output, TimeSpan.FromMinutes(5));
+            }
+            return output;
 
         }
 

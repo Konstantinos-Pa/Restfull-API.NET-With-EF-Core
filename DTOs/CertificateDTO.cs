@@ -31,7 +31,8 @@ namespace Assignment.DTOs
         [Required]
         public double Price { get; set; }
 
-        public List<Candidate> candidates { get; set; }= new List<Candidate>();
-       
+        [Required]
+        public string? CandidateId { get; set; }
+
     }
 }

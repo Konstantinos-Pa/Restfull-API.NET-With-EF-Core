@@ -4,20 +4,31 @@ using Assignment.Service;
 using Microsoft.EntityFrameworkCore;
 using Mapster;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Assignment.Repository
 {
     public class DepartmentRepository : IDepartmentRepository
     {
         private readonly ApplicationDbContext _context;
-        public DepartmentRepository(ApplicationDbContext context)
+        private readonly IMemoryCache _memoryCache;
+        private const string DepartmentcacheKey = "departments";
+
+        public DepartmentRepository(ApplicationDbContext context, IMemoryCache memoryCache)
         {
             _context = context;
+            _memoryCache = memoryCache;
         }
 
         public async Task<List<Department>> GetDepartmentAsync()
         {
-            return await _context.Departments.ToListAsync();
+            var output = _memoryCache.Get<List<Department>>(DepartmentcacheKey);
+            if (output == null)
+            {
+                output = await _context.Departments.ToListAsync();
+                _memoryCache.Set(DepartmentcacheKey, output, TimeSpan.FromDays(1)); // Cache for 1 Day because Departments are not expected to change frequently
+            }
+            return output;
         }
 
         public async Task<Department> GetDepartmentByIdAsync(int id)
