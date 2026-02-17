@@ -11,13 +11,5 @@ namespace Assignment.Repository
         Task<Candidate> GetCandidateByUserNameAsync(string username);
         Task<List<Candidate>> GetCandidatesAsync();
         Task UpdateCandidateAsync(string id, Candidate candidate);
-        Task AddCandidatesCertificateAsync(string candidateId, int certificateId);
-        Task RemoveCandidatesCertificateAsync(string candidateId, int certificateId);
-        Task<IEnumerable<Object>> MarksPerTopicPerCertificateAsync(string id);
-        Task<List<Certificate>> ObtainedCertificatesOfCandidate(string candidateNumber);
-        Task<List<Certificate>> NotObtainedCertificatesOfCandidate(string candidateNumber);
-        Task<List<Certificate>?> GetCertificatesByDateAsync(string candidateId);
-        Task<List<int>> GetCertificateCountsByDateRangeAsync(string candidateId, string Start, string End);
-
     }
 }

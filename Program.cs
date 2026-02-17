@@ -61,7 +61,7 @@ namespace Assignment
             builder.Services.AddScoped<IMapper, Mapper>();
             builder.Services.AddScoped<ICandidatesRepository, CandidatesRepository>();
             builder.Services.AddScoped<IAddressRepository, AddressRepository>();
-            builder.Services.AddScoped<ICertificateRepository, CertificatesRepository>();
+            builder.Services.AddScoped<ICertificatesRepository, CertificatesRepository>();
             builder.Services.AddScoped<IPhotoIdRepository, PhotoIdRepository>();
             builder.Services.AddScoped<ICandidatesAnalyticsRepository, CandidatesAnalyticsRepository>();
             builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();

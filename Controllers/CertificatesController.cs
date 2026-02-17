@@ -12,23 +12,23 @@ namespace Assignment.Controllers
     [ApiController]
     public class CertificatesController : ControllerBase
     {
-        private readonly ICertificateRepository _context;
+        private readonly ICertificatesRepository _context;
 
-        public CertificatesController(ICertificateRepository context)
+        public CertificatesController(ICertificatesRepository context)
         {
             _context = context;
         }
 
-        // GET: api/Certificates/"CandidateId"
-        [HttpGet("{CandidateId}")]
+        // GET: api/Certificates/Candidate/"CandidateId"
+        [HttpGet("Candidate/{CandidateId:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Authorize(Policy = AppPolicies.RequireUserRole)]
-        public async Task<IActionResult> GetCertifiicate([FromRoute]string CandidateId)
+        public async Task<IActionResult> GetAllCertificatesByCandidateIdAsync([FromRoute]string CandidateId)
         {
             try
             {
-                var certificates = await _context.GetCertificatesAsync(CandidateId);
+                var certificates = await _context.GetAllCertificatesByCandidateIdAsync(CandidateId);
                 return Ok(certificates.Adapt<List<CertificateDTO>>());
             }
             catch (Exception ex)
@@ -173,7 +173,7 @@ namespace Assignment.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Authorize(Policy = AppPolicies.RequireUserRole)]
-        public async Task<IActionResult> RemoveCandidatesCertificate([FromRoute] int CId, [FromRoute] int CAId)
+        public async Task<IActionResult> RemoveCandidatesCertificateAnalitycs([FromRoute] int CId, [FromRoute] int CAId)
         {
             try
             {
@@ -195,6 +195,76 @@ namespace Assignment.Controllers
         }
 
 
+        [HttpGet("NotObtained/{candidateId:guid}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Policy = AppPolicies.RequireUserRole)]
+        public async Task<IActionResult> NotObtainedCertificatesByCandidateIdAsync([FromRoute] string candidateId)
+        {
+            try
+            {
+                var output = await _context.NotObtainedCertificatesByCandidateIdAsync(candidateId);
+                return Ok(output);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+        [HttpGet("MarksPerTopic/{candidateId:guid}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Policy = AppPolicies.RequireUserRole)]
+        public async Task<IActionResult> MarksPerTopicPerCertificateAsync([FromRoute] string candidateId)
+        {
+            try
+            {
+                var output =  _context.MarksPerTopicPerCertificateAsync(candidateId);
+                return Ok(output);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+        [HttpPost("CertificatesFromSale/{candidateId:guid}/{saleCertificateId:int}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Policy = AppPolicies.RequireUserRole)]
+        public async Task<IActionResult> AddCertificatesFromSaleAsync([FromRoute] string candidateId, [FromRoute] int saleCertificateId)
+        {
+            try
+            {
+                var output = _context.AddCertificatesFromSaleAsync(candidateId, saleCertificateId);
+                return Ok(output);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
-
 }
